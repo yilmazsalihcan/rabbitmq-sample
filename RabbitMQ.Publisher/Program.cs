@@ -18,7 +18,7 @@ namespace RabbitMQ.Publisher
             {
                 using (var channel = connection.CreateModel())
                 {
-                    channel.QueueDeclare("hello", false, false, false, null);
+                    channel.QueueDeclare("hello", durable:true, false, false, null);
                     string message = "Hello World";
                     var bodyByte = Encoding.UTF8.GetBytes(message);
                     channel.BasicPublish("", routingKey: "hello", null, bodyByte);
