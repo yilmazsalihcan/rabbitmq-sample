@@ -18,11 +18,19 @@ namespace RabbitMQ.Publisher
             {
                 using (var channel = connection.CreateModel())
                 {
-                    channel.QueueDeclare("hello", false, false, false, null);
-                    string message = "Hello World";
-                    var bodyByte = Encoding.UTF8.GetBytes(message);
-                    channel.BasicPublish("", routingKey: "hello", null, bodyByte);
-                    Console.WriteLine("Mesajınız gönderilmiştir.");
+                    channel.QueueDeclare("task_queue", durable:true, false, false, null);
+                    string message = GetMessage(args);
+
+                    for (int i = 1; i < 11; i++)
+                    {
+                        var bodyByte = Encoding.UTF8.GetBytes($"{message}-{i}");
+                        var properties = channel.CreateBasicProperties();
+                        properties.Persistent = true; // If Instance down or failover. It will stay in this channel.
+                        channel.BasicPublish("", routingKey: "task_queue",properties, bodyByte);
+                        Console.WriteLine("Mesajınız gönderilmiştir.");
+                    }
+
+                  
                 }
 
                 Console.WriteLine("Çıkış yapmak için tıklayınız...");
@@ -30,6 +38,13 @@ namespace RabbitMQ.Publisher
             }
 
 
+
+        }
+
+        private static string GetMessage(string[] args)
+        {
+
+            return args[0].ToString();
 
         }
     }
