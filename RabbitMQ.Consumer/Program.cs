@@ -10,7 +10,7 @@ namespace RabbitMQ.Consumer
         static void Main(string[] args)
         {
             var factory = new ConnectionFactory();
-            factory.Uri = new Uri("amqps://wnanjfbl:FjuLTzMb--fve1OuKcp3Ar02gdt-JGMw@wasp.rmq.cloudamqp.com/wnanjfbl");
+            factory.Uri = new Uri("your cloud address");
             //factory.HostName = "localhost";
           
 
